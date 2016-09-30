@@ -12,5 +12,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        该module存在一些bug，比如每次火箭发射后，在前一次发射的基础上，都会上移一小段距离，直至移出屏幕外。
-
+  效果图：
+  ![image](https://github.com/ziyouqishi/launchRocket/blob/master/screenShot/rocket2.gif)
