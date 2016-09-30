@@ -9,13 +9,11 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import utitls.DensityUtitl;
 
@@ -84,13 +82,10 @@ public class MainActivity extends Activity {
 
                         int dx=newX-startX;
                         int dy=newY-startY;
-                        /*ivRocket.layout(ivRocket.getLeft()+dx,ivRocket.getTop()+dy,
-                                ivRocket.getRight()+dx,ivRocket.getBottom()+dy);*/
+
                         ivRocket.setX(ivRocket.getX()+dx);
                         ivRocket.setY(ivRocket.getY()+dy);
-                       // ivRocket.setTranslationX(dx);
-                       /* startX=(int)event.getRawX();
-                        startY=(int)event.getRawY();*/
+
 
                         startX=newX;
                         startY=newY;
@@ -107,11 +102,6 @@ public class MainActivity extends Activity {
                         int tranX=(int)ivRocket.getX();
                         int tranY=(int)ivRocket.getY();
 
-
-                        /*if(newl>210&&newr>540&&newt<900){
-                            Toast.makeText(MainActivity.this,"哈哈哈哈",Toast.LENGTH_SHORT).show();
-                        }*/
-
                         Log.d("tag", ivRocket.getLeft()+" ivRocket.getLeft()");
                         Log.d("tag", ivRocket.getRight()+" ivRocket.getRight()");
                         Log.d("tag", newl+" newl");
@@ -125,9 +115,8 @@ public class MainActivity extends Activity {
                         int offsetRight=(screenWidth+rocketWidth)/2;
 
                         if(offsetLeft>newl&&offsetRight<newr&&tranY>newt){
-                            Toast.makeText(MainActivity.this,"哈哈哈哈",Toast.LENGTH_SHORT).show();
                             showFire();
-                            launch2();
+                            launch();
                         }
 
 
@@ -193,45 +182,18 @@ public class MainActivity extends Activity {
     /**
      * 发射火箭
      */
+
     void launch(){
-        ivRocket.setX((fire.getRight()-fire.getLeft())/2);
-        ivRocket.setY(box.getTop());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Message message;
-                for(int i=0;i<10;i++){
-                    SystemClock.sleep(10);
-                     message=Message.obtain();
-                    int y=1250-i*100;
-                    message.obj=y;
-                    handler.sendMessage(message);
-                    Log.d("tag", "run: "+y);
-                }
-                message=Message.obtain();
-                message.what=0;
-                handler.sendMessage(message);
-
-
-            }
-        }).start();
-    }
-
-    void launch2(){
-       /* ivRocket.setX((fire.getRight()-fire.getLeft())/2);
-        ivRocket.setY(box.getTop());*/
-        ObjectAnimator objectAnimator=ObjectAnimator.ofFloat(ivRocket,"translationY",ivRocket.getTranslationY()-1100f);
+        ObjectAnimator objectAnimator=ObjectAnimator.ofFloat(ivRocket,"translationY",ivRocket.getTranslationY()-screenHeight+240);
         objectAnimator.setDuration(1500);
         objectAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 fire.setVisibility(View.INVISIBLE);
-               // ivRocket.layout(0,0,rocketWidth,rocketHeight);
             }
         });
         objectAnimator.start();
-        Toast.makeText(this,"方法已经执行",Toast.LENGTH_SHORT).show();
     }
 
 }
