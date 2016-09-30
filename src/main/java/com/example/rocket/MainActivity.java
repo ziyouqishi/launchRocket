@@ -1,5 +1,7 @@
 package com.example.rocket;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -82,10 +84,16 @@ public class MainActivity extends Activity {
 
                         int dx=newX-startX;
                         int dy=newY-startY;
-                        ivRocket.layout(ivRocket.getLeft()+dx,ivRocket.getTop()+dy,
-                                ivRocket.getRight()+dx,ivRocket.getBottom()+dy);
-                        startX=(int)event.getRawX();
-                        startY=(int)event.getRawY();
+                        /*ivRocket.layout(ivRocket.getLeft()+dx,ivRocket.getTop()+dy,
+                                ivRocket.getRight()+dx,ivRocket.getBottom()+dy);*/
+                        ivRocket.setX(ivRocket.getX()+dx);
+                        ivRocket.setY(ivRocket.getY()+dy);
+                       // ivRocket.setTranslationX(dx);
+                       /* startX=(int)event.getRawX();
+                        startY=(int)event.getRawY();*/
+
+                        startX=newX;
+                        startY=newY;
 
 
                         break;
@@ -96,15 +104,30 @@ public class MainActivity extends Activity {
                         int newl=fire.getLeft();
                         int newt=fire.getTop()-200;
                         int newr=fire.getRight();
+                        int tranX=(int)ivRocket.getX();
+                        int tranY=(int)ivRocket.getY();
+
 
                         /*if(newl>210&&newr>540&&newt<900){
                             Toast.makeText(MainActivity.this,"哈哈哈哈",Toast.LENGTH_SHORT).show();
                         }*/
 
-                        if(ivRocket.getLeft()>newl&&ivRocket.getRight()<newr&&ivRocket.getTop()>newt){
+                        Log.d("tag", ivRocket.getLeft()+" ivRocket.getLeft()");
+                        Log.d("tag", ivRocket.getRight()+" ivRocket.getRight()");
+                        Log.d("tag", newl+" newl");
+                        Log.d("tag", newr+" newr");
+                        Log.d("tag", newt+" newt");
+
+                        Log.d("tag", tranY+" tranY");
+                        Log.d("tag", tranX+" tranX");
+
+                        int offsetLeft=(screenWidth-rocketWidth)/2;
+                        int offsetRight=(screenWidth+rocketWidth)/2;
+
+                        if(offsetLeft>newl&&offsetRight<newr&&tranY>newt){
                             Toast.makeText(MainActivity.this,"哈哈哈哈",Toast.LENGTH_SHORT).show();
                             showFire();
-                            launch();
+                            launch2();
                         }
 
 
@@ -122,9 +145,6 @@ public class MainActivity extends Activity {
         relativeLayout.post(new Runnable() {
             @Override
             public void run() {
-                Log.d("tag", ivRocket.getWidth()+"  ivRocket.getWidth()");
-                Log.d("tag", box.getWidth()+"  box.getWidth()");
-                Log.d("tag", ivRocket.getHeight()+"  ivRocket.getHeight()");
                 rocketWidth=ivRocket.getWidth();
                 rocketHeight=ivRocket.getHeight();
                 int boxHeight=box.getHeight();
@@ -196,4 +216,22 @@ public class MainActivity extends Activity {
             }
         }).start();
     }
+
+    void launch2(){
+       /* ivRocket.setX((fire.getRight()-fire.getLeft())/2);
+        ivRocket.setY(box.getTop());*/
+        ObjectAnimator objectAnimator=ObjectAnimator.ofFloat(ivRocket,"translationY",ivRocket.getTranslationY()-1100f);
+        objectAnimator.setDuration(1500);
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                fire.setVisibility(View.INVISIBLE);
+               // ivRocket.layout(0,0,rocketWidth,rocketHeight);
+            }
+        });
+        objectAnimator.start();
+        Toast.makeText(this,"方法已经执行",Toast.LENGTH_SHORT).show();
+    }
+
 }
